@@ -116,8 +116,7 @@
                     android:text="🌤️ Tomorrow's Forecast"
                     android:textColor="@color/yellow_400"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp"/>
+                    android:textStyle="bold" android:layout_marginBottom="12dp"/>
 
                 <TextView
                     android:id="@+id/tv_forecast_text"
@@ -145,23 +144,59 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🧼 Panel Maintenance"
-                    android:textColor="@color/yellow_400"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="🧼 Panel Maintenance"
+                        android:textColor="@color/yellow_400"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/tv_last_cleaned"
-                    android:layout_width="wrap_content"
+                    <ImageButton
+                        android:id="@+id/btn_delete_maintenance"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@android:drawable/ic_menu_delete"
+                        app:tint="@color/red_400"
+                        android:padding="4dp"
+                        android:scaleType="fitCenter"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Last cleaned: Not recorded"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="12dp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tv_last_cleaned"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Last cleaned: Not recorded"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="14sp"/>
+
+                    <ImageButton
+                        android:id="@+id/btn_pick_cleaned_date"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@android:drawable/ic_menu_my_calendar"
+                        app:tint="@color/yellow_400"
+                        android:contentDescription="Select Date"
+                        android:padding="8dp"
+                        android:scaleType="fitCenter"/>
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_mark_cleaned"

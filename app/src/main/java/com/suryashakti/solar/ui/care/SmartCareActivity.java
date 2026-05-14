@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.suryashakti.solar.data.repository.EnergyViewModel;
 import com.suryashakti.solar.databinding.ActivitySmartCareBinding;
@@ -16,8 +17,10 @@ import com.suryashakti.solar.utils.NotificationHelper;
 import com.suryashakti.solar.utils.ThemeManager;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class SmartCareActivity extends AppCompatActivity {
 
@@ -56,22 +59,27 @@ public class SmartCareActivity extends AppCompatActivity {
     }
 
     private void setupROI() {
-        viewModel.getTotalSavingsLifetime().observe(this, totalSaved -> {
-            float saved = totalSaved != null ? totalSaved : 0;
-            float cost = prefs.getFloat(KEY_SYSTEM_COST, 0);
+        // ROI Calculation: Avoided Bill + Sale Earnings
+        viewModel.getAvoidedCostLifetime().observe(this, avoided -> {
+            float avoidedVal = avoided != null ? avoided : 0;
+            viewModel.getTotalEarningsFromSales().observe(this, earnings -> {
+                float earnVal = earnings != null ? earnings : 0;
+                float saved = avoidedVal + earnVal;
+                float cost = prefs.getFloat(KEY_SYSTEM_COST, 0);
 
-            binding.tvTotalSavedRoi.setText(String.format(Locale.getDefault(), "Saved: ₹%.0f", saved));
+                binding.tvTotalSavedRoi.setText(String.format(Locale.getDefault(), "Saved: ₹%.0f", saved));
 
-            if (cost > 0) {
-                int progress = (int) Math.min((saved / cost) * 100, 100);
-                binding.paybackProgressBar.setProgress(progress);
-                binding.tvPaybackProgress.setText(String.format(Locale.getDefault(), "System is %d%% Paid Off", progress));
-                binding.tvRemainingCost.setText(String.format(Locale.getDefault(), "Left: ₹%.0f", Math.max(0, cost - saved)));
-            } else {
-                binding.paybackProgressBar.setProgress(0);
-                binding.tvPaybackProgress.setText("Set system cost to track ROI");
-                binding.tvRemainingCost.setText("Left: ₹0");
-            }
+                if (cost > 0) {
+                    int progress = (int) Math.min((saved / cost) * 100, 100);
+                    binding.paybackProgressBar.setProgress(progress);
+                    binding.tvPaybackProgress.setText(String.format(Locale.getDefault(), "System is %d%% Paid Off", progress));
+                    binding.tvRemainingCost.setText(String.format(Locale.getDefault(), "Left: ₹%.0f", Math.max(0, cost - saved)));
+                } else {
+                    binding.paybackProgressBar.setProgress(0);
+                    binding.tvPaybackProgress.setText("Set system cost to track ROI");
+                    binding.tvRemainingCost.setText("Left: ₹0");
+                }
+            });
         });
 
         binding.btnSetCost.setOnClickListener(v -> {
@@ -81,7 +89,6 @@ public class SmartCareActivity extends AppCompatActivity {
             input.setText(String.valueOf(currentCost));
             input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
             
-            // FIX: Using MaterialAlertDialogBuilder for proper theme visibility
             new MaterialAlertDialogBuilder(this)
                     .setTitle("Total System Cost (₹)")
                     .setMessage("Enter the total amount paid for your solar setup.")
@@ -114,15 +121,52 @@ public class SmartCareActivity extends AppCompatActivity {
     }
 
     private void setupMaintenance() {
-        String lastCleaned = prefs.getString(KEY_LAST_CLEANED, "Not recorded");
-        binding.tvLastCleaned.setText("Last cleaned: " + lastCleaned);
+        updateMaintenanceUI();
 
         binding.btnMarkCleaned.setOnClickListener(v -> {
             String today = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(new Date());
-            prefs.edit().putString(KEY_LAST_CLEANED, today).apply();
-            binding.tvLastCleaned.setText("Last cleaned: " + today);
+            saveMaintenanceDate(today);
             Toast.makeText(this, "Great! Clean panels = High efficiency. 🧼", Toast.LENGTH_SHORT).show();
         });
+
+        binding.btnDeleteMaintenance.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Delete Record")
+                    .setMessage("Clear the last maintenance record?")
+                    .setPositiveButton("Clear", (d, w) -> {
+                        prefs.edit().remove(KEY_LAST_CLEANED).apply();
+                        updateMaintenanceUI();
+                        Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+
+        binding.btnPickCleanedDate.setOnClickListener(v -> {
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select Maintenance Date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build();
+
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis(selection);
+                String selected = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(calendar.getTime());
+                saveMaintenanceDate(selected);
+            });
+
+            datePicker.show(getSupportFragmentManager(), "MAINTENANCE_DATE_PICKER");
+        });
+    }
+
+    private void saveMaintenanceDate(String date) {
+        prefs.edit().putString(KEY_LAST_CLEANED, date).apply();
+        updateMaintenanceUI();
+    }
+
+    private void updateMaintenanceUI() {
+        String lastCleaned = prefs.getString(KEY_LAST_CLEANED, "Not recorded");
+        binding.tvLastCleaned.setText("Last cleaned: " + lastCleaned);
     }
 
     @Override

@@ -596,6 +596,20 @@
                 </LinearLayout>
                 <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
                 <LinearLayout
+                    android:id="@+id/btn_sales"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💰" android:textSize="22sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sales" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                </LinearLayout>
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
+                <LinearLayout
                     android:id="@+id/btn_appliances"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -607,20 +621,6 @@
                     android:background="?attr/selectableItemBackground">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔌" android:textSize="22sp"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Usage" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
-                </LinearLayout>
-                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
-                <LinearLayout
-                    android:id="@+id/btn_tips"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackground">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💡" android:textSize="22sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tips" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
                 </LinearLayout>
                 <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
                 <LinearLayout

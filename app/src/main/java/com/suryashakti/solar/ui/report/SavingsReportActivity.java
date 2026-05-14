@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SavingsReportActivity extends AppCompatActivity {
 
@@ -43,26 +44,46 @@ public class SavingsReportActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("30-Day Savings Report");
+            getSupportActionBar().setTitle("Energy Analytics");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         viewModel = new ViewModelProvider(this).get(EnergyViewModel.class);
 
+        // 30-day logs observation
         viewModel.getLast30Days().observe(this, logs -> {
             this.currentLogs = logs;
-            updateReport(logs);
+            update30DaySummary(logs);
         });
 
-        viewModel.getTotalSavingsThisMonth().observe(this, total -> {
-            binding.tvTotalSavings.setText(total != null ? String.format("₹%.2f", total) : "₹0.00");
+        // Financials
+        viewModel.getTotalEarningsFromSales().observe(this, earnings -> {
+            float val = earnings != null ? earnings : 0;
+            binding.tvSoldProfit.setText(String.format(Locale.getDefault(), "₹%.2f", val));
         });
 
-        // Advanced Feature: Export CSV
+        // Lifetime Stats
+        viewModel.getTotalGeneratedLifetime().observe(this, gen -> {
+            binding.tvLifetimeGen.setText(String.format(Locale.getDefault(), "%.1f kWh", gen != null ? gen : 0));
+        });
+
+        viewModel.getTotalKwhSold().observe(this, sold -> {
+            binding.tvLifetimeSold.setText(String.format(Locale.getDefault(), "%.1f kWh", sold != null ? sold : 0));
+        });
+
+        // ROI Calculation: Avoided Bill + Sale Earnings
+        viewModel.getAvoidedCostLifetime().observe(this, avoided -> {
+            float avoidedVal = avoided != null ? avoided : 0;
+            viewModel.getTotalEarningsFromSales().observe(this, earnings -> {
+                float earnVal = earnings != null ? earnings : 0;
+                binding.tvLifetimeFinancial.setText(String.format(Locale.getDefault(), "₹%.2f", avoidedVal + earnVal));
+            });
+        });
+
         binding.btnExportCsv.setOnClickListener(v -> exportLogsToCSV());
     }
 
-    private void updateReport(List<EnergyLog> logs) {
+    private void update30DaySummary(List<EnergyLog> logs) {
         if (logs == null || logs.isEmpty()) return;
 
         float totalGen = 0, totalCons = 0, totalSavings = 0;
@@ -70,27 +91,21 @@ public class SavingsReportActivity extends AppCompatActivity {
         for (EnergyLog log : logs) {
             totalGen += log.generatedKwh;
             totalCons += log.consumedKwh;
-            totalSavings += log.netSavings;
+            totalSavings += Math.max(0, log.netSavings); // Only positive savings for the 'Bill Savings' card
             if (log.overGeneration) overGenDays++;
         }
 
-        binding.tvTotalGenerated.setText(String.format("%.1f kWh", totalGen));
-        binding.tvTotalConsumed.setText(String.format("%.1f kWh", totalCons));
-        binding.tvOverGenDays.setText(overGenDays + " days");
-        binding.tvTotalSavings.setText(String.format("₹%.2f", totalSavings));
+        binding.tvTotalGenerated.setText(String.format(Locale.getDefault(), "%.1f kWh", totalGen));
+        binding.tvTotalConsumed.setText(String.format(Locale.getDefault(), "%.1f kWh", totalCons));
+        binding.tvTotalSavings.setText(String.format(Locale.getDefault(), "₹%.2f", totalSavings));
 
-        // Advanced: Environmental Impact Calculation
-        // Standard: 1 kWh Solar saves ~0.7 kg of CO2
+        // Environmental Impact
         float co2Saved = totalGen * 0.7f;
-        // Standard: 1 tree absorbs ~20 kg of CO2 per year
         float treesEquivalent = co2Saved / 20f;
+        binding.tvCo2Offset.setText(String.format(Locale.getDefault(), "%.1f kg", co2Saved));
+        binding.tvTreesEquivalent.setText(String.format(Locale.getDefault(), "%.2f", treesEquivalent));
 
-        binding.tvCo2Offset.setText(String.format("%.1f kg", co2Saved));
-        binding.tvTreesEquivalent.setText(String.format("%.2f", treesEquivalent));
-
-        // Advanced: Data-Driven Insights
         updateInsights(totalGen, totalCons, overGenDays);
-
         setupBarChart(logs);
     }
 
@@ -100,17 +115,18 @@ public class SavingsReportActivity extends AppCompatActivity {
         float ratio = (gen / cons) * 100;
 
         if (ratio >= 100) {
-            insight.append("🌟 Prosumer Alert! You generated ").append(String.format("%.0f%%", ratio))
-                    .append(" of your needs. ");
-            if (overGenDays > 15) insight.append("Excellent grid export consistency.");
-            else insight.append("Try shifting more heavy appliances to 11AM-3PM.");
-        } else if (ratio >= 50) {
-            insight.append("⚡ Partially Independent. You're covering ").append(String.format("%.0f%%", ratio))
-                    .append(" of usage via Solar. ");
-            insight.append("Check if panels need cleaning to reach the 80% mark!");
+            insight.append("🌟 Prosumer identified! Your solar yield is ").append(String.format(Locale.getDefault(), "%.0f%%", ratio))
+                    .append(" of consumption. ");
+            if (overGenDays > 20) insight.append("Exceptional consistency. You are a prime candidate for more energy sales.");
+            else insight.append("High surplus detected. Consider selling grid credits for profit.");
+        } else if (ratio >= 60) {
+            insight.append("⚡ High Efficiency. You cover ").append(String.format(Locale.getDefault(), "%.0f%%", ratio))
+                    .append(" of your power needs. ");
+            insight.append("Minor usage shifts to peak sun hours (12 PM - 3 PM) could eliminate your bill entirely.");
         } else {
-            insight.append("🔌 Grid Dependent. Usage is quite high. ");
-            insight.append("Consider reducing AC usage during non-peak hours or checking for phantom loads.");
+            insight.append("🔌 Grid Dependent. Your solar covers ").append(String.format(Locale.getDefault(), "%.0f%%", ratio))
+                    .append(" of usage. ");
+            insight.append("Check for heavy loads during evening hours. Try scheduling laundry or cleaning for midday.");
         }
         binding.tvInsightText.setText(insight.toString());
     }
@@ -123,7 +139,7 @@ public class SavingsReportActivity extends AppCompatActivity {
 
         StringBuilder csv = new StringBuilder("Date,Generated(kWh),Consumed(kWh),Battery(%),Weather,Savings(INR)\n");
         for (EnergyLog log : currentLogs) {
-            csv.append(String.format("%s,%.2f,%.2f,%.0f,%s,%.2f\n",
+            csv.append(String.format(Locale.getDefault(), "%s,%.2f,%.2f,%.0f,%s,%.2f\n",
                     log.date, log.generatedKwh, log.consumedKwh, log.batteryLevel, log.weatherCondition, log.netSavings));
         }
 
@@ -149,26 +165,19 @@ public class SavingsReportActivity extends AppCompatActivity {
     private void setupBarChart(List<EnergyLog> logs) {
         BarChart chart = binding.barChart;
         List<BarEntry> generatedEntries = new ArrayList<>();
-        List<BarEntry> consumedEntries = new ArrayList<>();
 
         int start = Math.max(0, logs.size() - 7);
         for (int i = start; i < logs.size(); i++) {
             EnergyLog log = logs.get(i);
-            int idx = i - start;
-            generatedEntries.add(new BarEntry(idx * 2f, log.generatedKwh));
-            consumedEntries.add(new BarEntry(idx * 2f + 0.5f, log.consumedKwh));
+            generatedEntries.add(new BarEntry(i - start, log.generatedKwh));
         }
 
-        BarDataSet generatedSet = new BarDataSet(generatedEntries, "Generated");
+        BarDataSet generatedSet = new BarDataSet(generatedEntries, "Daily Generation (kWh)");
         generatedSet.setColor(getColor(R.color.yellow_400));
         generatedSet.setValueTextColor(getThemeColor(android.R.attr.textColorSecondary));
 
-        BarDataSet consumedSet = new BarDataSet(consumedEntries, "Consumed");
-        consumedSet.setColor(getColor(R.color.red_400));
-        consumedSet.setValueTextColor(getThemeColor(android.R.attr.textColorSecondary));
-
-        BarData data = new BarData(generatedSet, consumedSet);
-        data.setBarWidth(0.45f);
+        BarData data = new BarData(generatedSet);
+        data.setBarWidth(0.6f);
 
         int textColor = getThemeColor(android.R.attr.textColorSecondary);
         int surfaceColor = getThemeColor(com.google.android.material.R.attr.colorSurface);
@@ -179,11 +188,11 @@ public class SavingsReportActivity extends AppCompatActivity {
         chart.getLegend().setTextColor(textColor);
         XAxis xAxis = chart.getXAxis();
         xAxis.setTextColor(textColor);
-        xAxis.setGranularity(2f);
+        xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         chart.getAxisLeft().setTextColor(textColor);
         chart.getAxisRight().setEnabled(false);
-        chart.animateY(800);
+        chart.animateY(1000);
         chart.invalidate();
     }
 

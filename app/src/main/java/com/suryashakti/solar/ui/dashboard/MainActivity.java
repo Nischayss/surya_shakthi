@@ -27,6 +27,7 @@ import com.suryashakti.solar.databinding.ActivityMainBinding;
 import com.suryashakti.solar.ui.care.SmartCareActivity;
 import com.suryashakti.solar.ui.log.GenerationLogActivity;
 import com.suryashakti.solar.ui.report.SavingsReportActivity;
+import com.suryashakti.solar.ui.sales.EnergySalesActivity;
 import com.suryashakti.solar.ui.tips.TipsActivity;
 import com.suryashakti.solar.ui.usage.ApplianceUsageActivity;
 import com.suryashakti.solar.utils.NotificationHelper;
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             else resetDashboard();
         });
 
-        // Use cumulative net energy instead of just today's
+        // Use available grid balance (Net - Sold)
         viewModel.getTotalNetEnergy().observe(this, totalNet -> {
             float net = totalNet != null ? totalNet : 0;
             String gridText = String.format(Locale.getDefault(), "Grid Balance: %.2f kWh", net);
@@ -149,19 +150,19 @@ public class MainActivity extends AppCompatActivity {
             
             if (net >= 0) {
                 binding.tvNetStatus.setText(String.format(Locale.getDefault(), "+%.2f kWh in Grid ⚡", net));
-                binding.tvNetStatus.setTextColor(getColor(R.color.green_500));
-                binding.tvGridBalanceMain.setTextColor(getColor(R.color.green_500));
+                binding.tvNetStatus.setTextColor(ContextCompat.getColor(this, R.color.green_500));
+                binding.tvGridBalanceMain.setTextColor(ContextCompat.getColor(this, R.color.green_500));
             } else {
                 binding.tvNetStatus.setText(String.format(Locale.getDefault(), "%.2f kWh from Grid 🔌", net));
-                binding.tvNetStatus.setTextColor(getColor(R.color.red_400));
-                binding.tvGridBalanceMain.setTextColor(getColor(R.color.red_400));
+                binding.tvNetStatus.setTextColor(ContextCompat.getColor(this, R.color.red_400));
+                binding.tvGridBalanceMain.setTextColor(ContextCompat.getColor(this, R.color.red_400));
             }
         });
 
         viewModel.getTotalSavingsThisMonth().observe(this, total -> {
                 float val = total != null ? total : 0;
-                binding.tvMonthlySavings.setText(String.format("₹%.2f", val));
-                binding.tvMonthlySavings.setTextColor(val >= 0 ? getColor(R.color.green_500) : getColor(R.color.red_400));
+                binding.tvMonthlySavings.setText(String.format("Earnings: ₹%.2f", val));
+                binding.tvMonthlySavings.setTextColor(val >= 0 ? ContextCompat.getColor(this, R.color.green_500) : ContextCompat.getColor(this, R.color.red_400));
         });
     }
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tvWeatherLabel.setText(weather);
         
         binding.tvTodaySavings.setText(String.format("₹%.2f", log.netSavings));
-        binding.tvTodaySavings.setTextColor(log.netSavings >= 0 ? getColor(R.color.green_500) : getColor(R.color.red_400));
+        binding.tvTodaySavings.setTextColor(log.netSavings >= 0 ? ContextCompat.getColor(this, R.color.green_500) : ContextCompat.getColor(this, R.color.red_400));
 
         binding.tvIndependenceScore.setText(progressVal + "/100");
         binding.independenceProgressBar.setProgress(progressVal);
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tvBattery.setText("0%");
         binding.batteryProgressBar.setProgress(0);
         binding.tvNetStatus.setText("No data yet");
-        binding.tvNetStatus.setTextColor(getColor(R.color.yellow_400));
+        binding.tvNetStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow_400));
         binding.tvProsumerBadge.setVisibility(View.GONE);
         binding.tvTodaySavings.setText("₹0.00");
         binding.tvIndependenceScore.setText("0/100");
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tvTodayDate.setOnClickListener(v -> showDatePicker());
         binding.btnLog.setOnClickListener(v -> startActivity(new Intent(this, GenerationLogActivity.class)));
         binding.btnReport.setOnClickListener(v -> startActivity(new Intent(this, SavingsReportActivity.class)));
-        binding.btnTips.setOnClickListener(v -> startActivity(new Intent(this, TipsActivity.class)));
+        binding.btnSales.setOnClickListener(v -> startActivity(new Intent(this, EnergySalesActivity.class)));
         binding.btnAppliances.setOnClickListener(v -> startActivity(new Intent(this, ApplianceUsageActivity.class)));
         binding.btnSmartCare.setOnClickListener(v -> startActivity(new Intent(this, SmartCareActivity.class)));
         binding.btnSaveLog.setOnClickListener(v -> saveManualEntry());

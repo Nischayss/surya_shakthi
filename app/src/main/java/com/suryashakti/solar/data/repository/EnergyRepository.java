@@ -8,6 +8,7 @@ import com.suryashakti.solar.data.db.AppDatabase;
 import com.suryashakti.solar.data.db.EnergyDao;
 import com.suryashakti.solar.data.model.Appliance;
 import com.suryashakti.solar.data.model.EnergyLog;
+import com.suryashakti.solar.data.model.SaleTransaction;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -55,12 +56,20 @@ public class EnergyRepository {
         return dao.getTotalGeneratedLifetime();
     }
 
+    public LiveData<Float> getTotalConsumedLifetime() {
+        return dao.getTotalConsumedLifetime();
+    }
+
+    public LiveData<Float> getAvoidedCostLifetime() {
+        return dao.getAvoidedCostLifetime();
+    }
+
     public LiveData<Float> getTotalSavingsLifetime() {
         return dao.getTotalSavingsLifetime();
     }
 
-    public LiveData<Float> getTotalNetEnergy() {
-        return dao.getTotalNetEnergy();
+    public LiveData<Float> getAvailableGridBalance() {
+        return dao.getAvailableGridBalance();
     }
 
     public void getLogByDate(String date, Callback<EnergyLog> callback) {
@@ -81,6 +90,27 @@ public class EnergyRepository {
 
     public void deleteAppliance(Appliance appliance) {
         executor.execute(() -> dao.deleteAppliance(appliance));
+    }
+
+    // Sale Transactions
+    public void insertSale(SaleTransaction sale) {
+        executor.execute(() -> dao.insertSale(sale));
+    }
+
+    public LiveData<List<SaleTransaction>> getAllSales() {
+        return dao.getAllSales();
+    }
+
+    public LiveData<Float> getTotalEarningsFromSales() {
+        return dao.getTotalEarningsFromSales();
+    }
+
+    public LiveData<Float> getTotalKwhSold() {
+        return dao.getTotalKwhSold();
+    }
+
+    public void deleteAllSales() {
+        executor.execute(dao::deleteAllSales);
     }
 
     public interface Callback<T> {

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.suryashakti.solar.data.model.Appliance;
 import com.suryashakti.solar.data.model.EnergyLog;
+import com.suryashakti.solar.data.model.SaleTransaction;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,7 +22,9 @@ public class EnergyViewModel extends AndroidViewModel {
     private final LiveData<List<EnergyLog>> last30Days;
     private final LiveData<EnergyLog> latestLog;
     private final LiveData<List<Appliance>> allAppliances;
-    private final LiveData<Float> totalNetEnergy;
+    private final LiveData<Float> availableGridBalance;
+    private final LiveData<List<SaleTransaction>> allSales;
+    private final LiveData<Float> totalEarningsFromSales;
 
     public EnergyViewModel(Application application) {
         super(application);
@@ -30,7 +33,9 @@ public class EnergyViewModel extends AndroidViewModel {
         last30Days = repository.getLast30Days();
         latestLog = repository.getLatestLog();
         allAppliances = repository.getAllAppliances();
-        totalNetEnergy = repository.getTotalNetEnergy();
+        availableGridBalance = repository.getAvailableGridBalance();
+        allSales = repository.getAllSales();
+        totalEarningsFromSales = repository.getTotalEarningsFromSales();
     }
 
     public void insert(EnergyLog log) {
@@ -71,7 +76,15 @@ public class EnergyViewModel extends AndroidViewModel {
     }
 
     public LiveData<Float> getTotalNetEnergy() {
-        return totalNetEnergy;
+        return availableGridBalance;
+    }
+
+    public LiveData<Float> getAvoidedCostLifetime() {
+        return repository.getAvoidedCostLifetime();
+    }
+
+    public LiveData<Float> getTotalKwhSold() {
+        return repository.getTotalKwhSold();
     }
 
     public String getTodayDate() {
@@ -89,5 +102,22 @@ public class EnergyViewModel extends AndroidViewModel {
 
     public void deleteAppliance(Appliance appliance) {
         repository.deleteAppliance(appliance);
+    }
+
+    // Sale Transaction Operations
+    public void insertSale(SaleTransaction sale) {
+        repository.insertSale(sale);
+    }
+
+    public LiveData<List<SaleTransaction>> getAllSales() {
+        return allSales;
+    }
+
+    public LiveData<Float> getTotalEarningsFromSales() {
+        return totalEarningsFromSales;
+    }
+
+    public void deleteAllSales() {
+        repository.deleteAllSales();
     }
 }
