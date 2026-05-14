@@ -49,6 +49,7 @@ public class GenerationLogActivity extends AppCompatActivity {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setNestedScrollingEnabled(false);
 
         viewModel.getAllLogs().observe(this, logs -> {
             if (logs != null && !logs.isEmpty()) {
@@ -59,6 +60,17 @@ public class GenerationLogActivity extends AppCompatActivity {
                 binding.tvEmpty.setVisibility(View.VISIBLE);
                 binding.recyclerView.setVisibility(View.GONE);
             }
+        });
+
+        binding.btnHome.setOnClickListener(v -> finish());
+        
+        binding.btnClearHistory.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Clear All History")
+                    .setMessage("This will permanently delete all logs. Continue?")
+                    .setPositiveButton("Clear All", (d, w) -> viewModel.deleteAll())
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
     }
 
@@ -72,22 +84,11 @@ public class GenerationLogActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("Clear All History").setOnMenuItemClickListener(item -> {
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle("Clear All History")
-                    .setMessage("This will permanently delete all logs. Continue?")
-                    .setPositiveButton("Clear All", (d, w) -> viewModel.deleteAll())
-                    .setNegativeButton("Cancel", null)
-                    .show();
-            return true;
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) { finish(); return true; }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

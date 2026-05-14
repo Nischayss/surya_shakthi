@@ -16,25 +16,26 @@ public class EnergyLog {
     public float consumedKwh;
     public float batteryLevel;    // 0–100
     public String weatherCondition;
-    public float netSavings;      // Now represents (Generated - Consumed) * Rate
+    public float netSavings;      // Now represents (Generated - Consumed) * unitPrice
     public boolean overGeneration;
+    public float unitPrice;       // Price per unit at the time of logging
 
     public EnergyLog() {}
 
     @Ignore
     public EnergyLog(String date, float generatedKwh, float consumedKwh,
-                     float batteryLevel, String weatherCondition) {
+                     float batteryLevel, String weatherCondition, float unitPrice) {
         this.date = date;
         this.generatedKwh = generatedKwh;
         this.consumedKwh = consumedKwh;
         this.batteryLevel = batteryLevel;
         this.weatherCondition = weatherCondition;
+        this.unitPrice = unitPrice;
 
         float net = generatedKwh - consumedKwh;
         this.overGeneration = net > 0;
         
-        // Net Financial Impact = (Produced - Consumed) * 8
-        // If negative, it's a cost. If positive, it's a true saving/earning.
-        this.netSavings = net * 8f;
+        // Net Financial Impact = (Produced - Consumed) * unitPrice
+        this.netSavings = net * unitPrice;
     }
 }

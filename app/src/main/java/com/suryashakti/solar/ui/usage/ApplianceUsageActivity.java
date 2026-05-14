@@ -79,6 +79,48 @@ public class ApplianceUsageActivity extends AppCompatActivity {
                 updatePieChart(currentAppliances);
             }
         });
+
+        // Quick Calculator Implementation
+        binding.btnCalculateRuntime.setOnClickListener(v -> calculateQuickRuntime());
+    }
+
+    private void calculateQuickRuntime() {
+        String inputStr = binding.etCalcKwh.getText().toString().trim();
+        if (TextUtils.isEmpty(inputStr)) {
+            binding.tvCalcResult.setText("Please enter a kWh value.");
+            return;
+        }
+
+        try {
+            float testKwh = Float.parseFloat(inputStr);
+            if (currentAppliances == null || currentAppliances.isEmpty()) {
+                binding.tvCalcResult.setText("Add some appliances first to see how long " + testKwh + " kWh lasts.");
+                return;
+            }
+
+            float totalDailyKwh = 0;
+            for (Appliance a : currentAppliances) {
+                totalDailyKwh += a.watts;
+            }
+
+            if (totalDailyKwh <= 0) {
+                binding.tvCalcResult.setText("Total appliance consumption is 0. Check your settings.");
+                return;
+            }
+
+            float totalDays = testKwh / totalDailyKwh;
+            String resultText;
+            if (totalDays >= 1) {
+                resultText = String.format(Locale.getDefault(), "With %.1f kWh, you can run ALL listed appliances for %.1f days.", testKwh, totalDays);
+            } else {
+                resultText = String.format(Locale.getDefault(), "With %.1f kWh, you can run ALL listed appliances for %.1f hours.", testKwh, totalDays * 24);
+            }
+            binding.tvCalcResult.setText(resultText);
+            binding.tvCalcResult.setTextColor(getResources().getColor(R.color.yellow_400));
+
+        } catch (NumberFormatException e) {
+            binding.tvCalcResult.setText("Invalid number format.");
+        }
     }
 
     private void saveAppliance() {
@@ -113,7 +155,6 @@ public class ApplianceUsageActivity extends AppCompatActivity {
         else if (lowerName.contains("iron")) emoji = "💨";
         else if (lowerName.contains("geyser") || lowerName.contains("heater")) emoji = "🔥";
 
-        // 'watts' field in DB stores kWh per Day
         Appliance appliance = new Appliance(name, emoji, powerKwhDay);
         viewModel.insertAppliance(appliance);
 
@@ -245,13 +286,13 @@ public class ApplianceUsageActivity extends AppCompatActivity {
                         holder.tvRuntime.setText(String.format(Locale.getDefault(), "Grid covers %.0f hours", totalDays * 24));
                     }
                 }
-                holder.tvRuntime.setTextColor(Color.parseColor("#22C55E")); // Green
+                holder.tvRuntime.setTextColor(Color.parseColor("#22C55E"));
             } else if (currentGridBalance <= 0) {
                 holder.tvRuntime.setText("No grid surplus available");
-                holder.tvRuntime.setTextColor(Color.parseColor("#F87171")); // Red
+                holder.tvRuntime.setTextColor(Color.parseColor("#F87171"));
             } else {
                 holder.tvRuntime.setText("Enter consumption data");
-                holder.tvRuntime.setTextColor(Color.parseColor("#94A3B8")); // Slate
+                holder.tvRuntime.setTextColor(Color.parseColor("#94A3B8"));
             }
 
             holder.btnDelete.setOnClickListener(v -> listener.onDelete(item));
