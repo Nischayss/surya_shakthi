@@ -210,8 +210,7 @@
             android:text="🌿 Environmental Impact"
             android:textColor="@color/green_500"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+            android:textStyle="bold" android:layout_marginBottom="12dp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -274,9 +273,10 @@
                 android:padding="12dp">
 
                 <TextView
+                    android:id="@+id/tv_chart_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Last 7 Days – Generation Trend"
+                    android:text="Weekly Comparison: Generated vs Consumed"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="13sp"
                     android:layout_marginBottom="8dp"/>

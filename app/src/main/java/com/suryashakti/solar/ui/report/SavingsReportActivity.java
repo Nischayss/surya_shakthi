@@ -18,6 +18,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.suryashakti.solar.R;
 import com.suryashakti.solar.data.model.EnergyLog;
 import com.suryashakti.solar.data.repository.EnergyViewModel;
@@ -91,7 +92,7 @@ public class SavingsReportActivity extends AppCompatActivity {
         for (EnergyLog log : logs) {
             totalGen += log.generatedKwh;
             totalCons += log.consumedKwh;
-            totalSavings += Math.max(0, log.netSavings); // Only positive savings for the 'Bill Savings' card
+            totalSavings += Math.max(0, log.netSavings);
             if (log.overGeneration) overGenDays++;
         }
 
@@ -112,7 +113,7 @@ public class SavingsReportActivity extends AppCompatActivity {
     private void updateInsights(float gen, float cons, int overGenDays) {
         if (gen == 0) return;
         StringBuilder insight = new StringBuilder();
-        float ratio = (gen / cons) * 100;
+        float ratio = cons > 0 ? (gen / cons) * 100 : 100;
 
         if (ratio >= 100) {
             insight.append("🌟 Prosumer identified! Your solar yield is ").append(String.format(Locale.getDefault(), "%.0f%%", ratio))
@@ -165,31 +166,73 @@ public class SavingsReportActivity extends AppCompatActivity {
     private void setupBarChart(List<EnergyLog> logs) {
         BarChart chart = binding.barChart;
         List<BarEntry> generatedEntries = new ArrayList<>();
+        List<BarEntry> consumedEntries = new ArrayList<>();
 
-        int start = Math.max(0, logs.size() - 7);
-        for (int i = start; i < logs.size(); i++) {
-            EnergyLog log = logs.get(i);
-            generatedEntries.add(new BarEntry(i - start, log.generatedKwh));
+        // Reverse for chronological order
+        List<EnergyLog> chronoLogs = new ArrayList<>();
+        for (int i = logs.size() - 1; i >= 0; i--) chronoLogs.add(logs.get(i));
+
+        // Show up to 30 days
+        int displayCount = Math.min(chronoLogs.size(), 30);
+        int startIndex = chronoLogs.size() - displayCount;
+
+        for (int i = 0; i < displayCount; i++) {
+            EnergyLog log = chronoLogs.get(startIndex + i);
+            generatedEntries.add(new BarEntry(i, log.generatedKwh));
+            consumedEntries.add(new BarEntry(i, log.consumedKwh));
         }
 
-        BarDataSet generatedSet = new BarDataSet(generatedEntries, "Daily Generation (kWh)");
+        BarDataSet generatedSet = new BarDataSet(generatedEntries, "Generated (kWh)");
         generatedSet.setColor(getColor(R.color.yellow_400));
-        generatedSet.setValueTextColor(getThemeColor(android.R.attr.textColorSecondary));
+        generatedSet.setDrawValues(false);
 
-        BarData data = new BarData(generatedSet);
-        data.setBarWidth(0.6f);
+        BarDataSet consumedSet = new BarDataSet(consumedEntries, "Expenditure (kWh)");
+        consumedSet.setColor(getColor(R.color.red_400));
+        consumedSet.setDrawValues(false);
+
+        float groupSpace = 0.3f;
+        float barSpace = 0.05f;
+        float barWidth = 0.3f;
+
+        BarData data = new BarData(generatedSet, consumedSet);
+        data.setBarWidth(barWidth);
 
         int textColor = getThemeColor(android.R.attr.textColorSecondary);
         int surfaceColor = getThemeColor(com.google.android.material.R.attr.colorSurface);
 
         chart.setData(data);
+        chart.groupBars(0f, groupSpace, barSpace);
+        chart.setFitBars(true);
+        
         chart.setBackgroundColor(surfaceColor);
         chart.getDescription().setEnabled(false);
         chart.getLegend().setTextColor(textColor);
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+        chart.setPinchZoom(true);
+
         XAxis xAxis = chart.getXAxis();
         xAxis.setTextColor(textColor);
+        xAxis.setCenterAxisLabels(true);
         xAxis.setGranularity(1f);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(displayCount);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelCount(Math.min(displayCount, 6)); // Avoid overcrowding labels
+
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int idx = (int) value;
+                if (idx >= 0 && idx < displayCount) {
+                    String date = chronoLogs.get(startIndex + idx).date;
+                    if (date.length() > 5) return date.substring(5); // Show MM-dd
+                    return date;
+                }
+                return "";
+            }
+        });
+
         chart.getAxisLeft().setTextColor(textColor);
         chart.getAxisRight().setEnabled(false);
         chart.animateY(1000);

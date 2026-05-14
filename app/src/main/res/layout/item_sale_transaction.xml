@@ -46,7 +46,19 @@
             android:text="+ ₹180.00"
             android:textColor="@color/green_500"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_delete_sale"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/red_400"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="Delete Sale Record"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

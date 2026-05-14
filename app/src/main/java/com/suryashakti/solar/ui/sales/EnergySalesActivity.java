@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,7 +105,14 @@ public class EnergySalesActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        adapter = new SalesAdapter();
+        adapter = new SalesAdapter(sale -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Delete Sale Record")
+                    .setMessage(String.format(Locale.getDefault(), "Remove this sale record of ₹%.2f?", sale.totalAmount))
+                    .setPositiveButton("Delete", (dialog, which) -> viewModel.deleteSale(sale))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
         binding.rvSales.setLayoutManager(new LinearLayoutManager(this));
         binding.rvSales.setAdapter(adapter);
     }
@@ -118,6 +126,13 @@ public class EnergySalesActivity extends AppCompatActivity {
     // --- Adapter ---
     static class SalesAdapter extends RecyclerView.Adapter<SalesAdapter.ViewHolder> {
         private List<SaleTransaction> items = new ArrayList<>();
+        private final OnDeleteListener deleteListener;
+
+        interface OnDeleteListener { void onDelete(SaleTransaction sale); }
+
+        SalesAdapter(OnDeleteListener deleteListener) {
+            this.deleteListener = deleteListener;
+        }
 
         void setSales(List<SaleTransaction> sales) {
             this.items = sales;
@@ -137,6 +152,7 @@ public class EnergySalesActivity extends AppCompatActivity {
             holder.tvDate.setText(item.date);
             holder.tvDetails.setText(String.format(Locale.getDefault(), "Sold %.1f kWh at ₹%.1f/u", item.kwhSold, item.pricePerUnit));
             holder.tvAmount.setText(String.format(Locale.getDefault(), "+ ₹%.2f", item.totalAmount));
+            holder.btnDelete.setOnClickListener(v -> deleteListener.onDelete(item));
         }
 
         @Override
@@ -144,11 +160,13 @@ public class EnergySalesActivity extends AppCompatActivity {
 
         static class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvDate, tvDetails, tvAmount;
+            ImageButton btnDelete;
             ViewHolder(View v) {
                 super(v);
                 tvDate = v.findViewById(R.id.tv_sale_date);
                 tvDetails = v.findViewById(R.id.tv_sale_details);
                 tvAmount = v.findViewById(R.id.tv_sale_amount);
+                btnDelete = v.findViewById(R.id.btn_delete_sale);
             }
         }
     }

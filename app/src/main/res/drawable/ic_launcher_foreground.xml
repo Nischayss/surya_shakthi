@@ -9,35 +9,35 @@
         android:fillColor="#0D1117"
         android:pathData="M0,0h108v108h-108z"/>
 
-    <!-- Premium Professional Solar Logo: Centered at (54, 54) -->
+    <!-- Premium Professional Solar Logo: Mathematically Centered at (54, 54) -->
 
-    <!-- Outer Glow -->
+    <!-- Outer Decorative Glow -->
     <path
         android:fillColor="#FBBF24"
         android:alpha="0.1"
-        android:pathData="M54,54m-44,0a44,44 0,1 1,88 0a44,44 0,1 1,-88 0" />
+        android:pathData="M54,54m-42,0a42,42 0,1 1,84 0a42,42 0,1 1,-84 0" />
 
-    <!-- Main Sun Core: Perfectly centered circle with Radius 22 -->
+    <!-- Main Sun Core: Perfect Circle centered at 54,54 with Radius 20 -->
     <path
         android:fillColor="#FBBF24"
-        android:pathData="M54,54m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0" />
+        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0" />
 
-    <!-- Symmetrical Professional Rays -->
+    <!-- Perfectly Symmetrical Rays starting 26dp from center -->
     <path
         android:strokeColor="#FBBF24"
         android:strokeWidth="5"
         android:strokeLineCap="round"
         android:pathData="
-            M54,26V6
-            M54,82V102
-            M26,54H6
-            M82,54H102
-            M34,34L20,20
-            M74,74L88,88
-            M74,34L88,20
-            M34,74L20,88" />
+            M54,28V6
+            M54,80V102
+            M28,54H6
+            M80,54H102
+            M35.6,35.6L20,20
+            M72.4,72.4L88,88
+            M72.4,35.6L88,20
+            M35.6,72.4L20,88" />
 
-    <!-- Perfectly Centered Shakti (Energy) Bolt -->
+    <!-- Perfectly Centered Shakti (Energy) Bolt Symbol -->
     <path
         android:fillColor="#0D1117"
         android:pathData="M59,38 L44,56 H54.5 L49,70 L64,52 H54 L59,38 Z" />

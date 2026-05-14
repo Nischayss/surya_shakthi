@@ -79,6 +79,9 @@ public interface EnergyDao {
     @Query("SELECT SUM(kwhSold) FROM sale_transactions")
     LiveData<Float> getTotalKwhSold();
 
+    @Delete
+    void deleteSale(SaleTransaction sale);
+
     @Query("DELETE FROM sale_transactions")
     void deleteAllSales();
 }

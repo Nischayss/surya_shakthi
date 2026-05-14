@@ -109,6 +109,10 @@ public class EnergyRepository {
         return dao.getTotalKwhSold();
     }
 
+    public void deleteSale(SaleTransaction sale) {
+        executor.execute(() -> dao.deleteSale(sale));
+    }
+
     public void deleteAllSales() {
         executor.execute(dao::deleteAllSales);
     }

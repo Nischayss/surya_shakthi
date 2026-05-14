@@ -117,6 +117,10 @@ public class EnergyViewModel extends AndroidViewModel {
         return totalEarningsFromSales;
     }
 
+    public void deleteSale(SaleTransaction sale) {
+        repository.deleteSale(sale);
+    }
+
     public void deleteAllSales() {
         repository.deleteAllSales();
     }

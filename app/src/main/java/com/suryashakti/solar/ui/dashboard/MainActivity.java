@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setupWeatherSelector();
         setupObservers();
         setupClickListeners();
+        setupMeterCalculator();
         updateDateDisplay();
         updateEstimation();
     }
@@ -134,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
                 estGen, capacity, weather);
         
         binding.tvEstimatedResult.setText(resultText);
+
+        // Peak Suggestion logic: Automatic notification when Sunny is selected
+        if (WeatherSimulator.SUNNY.equals(weather)) {
+            NotificationHelper.sendPeakSunAlert(this);
+            Toast.makeText(this, "Peak Sun detected! ☀️ Notification sent.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupObservers() {
@@ -275,6 +284,49 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
         });
+
+        binding.btnToggleMeter.setOnClickListener(v -> {
+            if (binding.meterReadingContainer.getVisibility() == View.GONE) {
+                binding.meterReadingContainer.setVisibility(View.VISIBLE);
+                binding.btnToggleMeter.setText("Enter kWh Directly");
+                binding.etConsumed.setEnabled(false);
+            } else {
+                binding.meterReadingContainer.setVisibility(View.GONE);
+                binding.btnToggleMeter.setText("Calculate from Meter Readings");
+                binding.etConsumed.setEnabled(true);
+            }
+        });
+    }
+
+    private void setupMeterCalculator() {
+        TextWatcher meterWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateFromMeter();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        binding.etPrevMeter.addTextChangedListener(meterWatcher);
+        binding.etCurrMeter.addTextChangedListener(meterWatcher);
+    }
+
+    private void calculateFromMeter() {
+        String prevStr = binding.etPrevMeter.getText().toString().trim();
+        String currStr = binding.etCurrMeter.getText().toString().trim();
+        if (!TextUtils.isEmpty(prevStr) && !TextUtils.isEmpty(currStr)) {
+            try {
+                float prev = Float.parseFloat(prevStr);
+                float curr = Float.parseFloat(currStr);
+                if (curr >= prev) {
+                    binding.etConsumed.setText(String.format(Locale.getDefault(), "%.2f", curr - prev));
+                } else {
+                    binding.etConsumed.setText("0.00");
+                }
+            } catch (NumberFormatException ignored) {}
+        }
     }
 
     private void showDatePicker() {
@@ -333,5 +385,7 @@ public class MainActivity extends AppCompatActivity {
         binding.etGenerated.setText("");
         binding.etConsumed.setText("");
         binding.etBattery.setText("");
+        binding.etPrevMeter.setText("");
+        binding.etCurrMeter.setText("");
     }
 }
