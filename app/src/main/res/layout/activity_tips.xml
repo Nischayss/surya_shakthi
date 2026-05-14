@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💡 Solar Energy Tips"
+            android:textColor="@color/yellow_400"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Tip Cards -->
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="☀️ Peak Hour Usage" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Run heavy appliances like washing machines, geysers, and pumps between 10 AM – 2 PM when solar generation is at its peak. This maximises your solar usage and reduces grid dependency."
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🔋 Battery Management" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Avoid letting your battery drop below 20% or stay above 90% for extended periods. Keeping it between 20–80% significantly extends battery life and improves efficiency."
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🧹 Panel Cleaning" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Dust and bird droppings on panels can reduce efficiency by 15–25%. Clean panels every 2 weeks with a soft cloth and water. Early morning is the best time to avoid hot panel surfaces."
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⚡ Grid Export Benefits" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="When your generation exceeds consumption (over-generation), excess electricity is exported to the grid. Under net metering policies in India, this earns you credits on your electricity bill. Track your over-generation days in the report!"
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🌤️ Cloudy Day Strategy" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="On cloudy days, generation drops by 60–80%. Postpone non-essential high-energy tasks. Use stored battery power for critical needs and minimise grid drawing by reducing standby devices."
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="💰 Maximize Savings" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Replace high-wattage bulbs with LEDs, use 5-star rated appliances, and unplug chargers when not in use. Every unit saved on consumption is a unit more solar energy available for export or storage."
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" app:cardBackgroundColor="?attr/colorSurface" app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="📊 Prosumer Goal" android:textColor="@color/yellow_400"
+                    android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Aim for a Green Energy Independence score above 80. This means your solar panels are covering more than 80% of your daily needs — making you a true Prosumer (Producer + Consumer) of clean energy!"
+                    android:textColor="?android:attr/textColorPrimary" android:textSize="13sp" android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

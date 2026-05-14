@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base theme -->
+    <style name="Theme.SuryaShakti" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/yellow_400</item>
+        <item name="colorPrimaryVariant">@color/yellow_200</item>
+        <item name="colorOnPrimary">@color/bg_dark</item>
+        <item name="colorSecondary">@color/green_500</item>
+        <item name="colorOnSecondary">@color/bg_dark</item>
+        <item name="actionBarStyle">@style/SuryaActionBar</item>
+        <item name="android:statusBarColor">@color/surface_dark</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
+
+        <!-- Material Colors Mapping -->
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:editTextColor">@color/text_primary</item>
+
+        <!-- Dialog Styling -->
+        <item name="materialAlertDialogTheme">@style/SuryaAlertDialogTheme</item>
+
+        <!-- Spinner Styles -->
+        <item name="android:spinnerItemStyle">@style/SuryaSpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SuryaSpinnerDropDownItem</item>
+    </style>
+
+    <!-- Light Theme -->
+    <style name="Theme.SuryaShakti.Light" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/yellow_400</item>
+        <item name="colorPrimaryVariant">@color/yellow_200</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/green_500</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:windowBackground">@color/bg_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/text_primary_light</item>
+        <item name="colorOnBackground">@color/text_primary_light</item>
+
+        <item name="android:textColor">@color/text_primary_light</item>
+        <item name="android:textColorPrimary">@color/text_primary_light</item>
+        <item name="android:textColorSecondary">@color/text_secondary_light</item>
+        <item name="android:textColorHint">@color/text_secondary_light</item>
+        <item name="android:editTextColor">@color/text_primary_light</item>
+
+        <item name="actionBarStyle">@style/SuryaActionBar.Light</item>
+        <item name="android:statusBarColor">@color/yellow_400</item>
+        <item name="android:navigationBarColor">@color/bg_light</item>
+
+        <!-- Dialog Styling for Light Mode -->
+        <item name="materialAlertDialogTheme">@style/SuryaAlertDialogTheme.Light</item>
+    </style>
+
+    <!-- Dark Theme -->
+    <style name="Theme.SuryaShakti.Dark" parent="Theme.SuryaShakti">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:editTextColor">@color/text_primary</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
+    </style>
+
+    <!-- Dialog Styles - Fixed visibility with explicit colors and background -->
+    <style name="SuryaAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="colorPrimary">@color/yellow_400</item>
+        <item name="buttonBarPositiveButtonStyle">@style/SuryaDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/SuryaDialogButtonStyle</item>
+    </style>
+
+    <style name="SuryaAlertDialogTheme.Light" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/text_primary_light</item>
+        <item name="android:textColor">@color/text_primary_light</item>
+        <item name="android:textColorPrimary">@color/text_primary_light</item>
+        <item name="android:textColorSecondary">@color/text_secondary_light</item>
+        <item name="colorPrimary">@color/bg_dark</item>
+        <item name="buttonBarPositiveButtonStyle">@style/SuryaDialogButtonStyle.Light</item>
+        <item name="buttonBarNegativeButtonStyle">@style/SuryaDialogButtonStyle.Light</item>
+    </style>
+
+    <style name="SuryaDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/yellow_400</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SuryaDialogButtonStyle.Light" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/bg_dark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SuryaSpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="SuryaSpinnerDropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
+    <style name="SuryaSpinnerTheme" parent="ThemeOverlay.AppCompat">
+        <item name="android:textColorPrimary">?android:attr/textColorPrimary</item>
+        <item name="android:textColorSecondary">?android:attr/textColorSecondary</item>
+        <item name="colorSurface">?attr/colorSurface</item>
+    </style>
+
+    <style name="SuryaActionBar" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/surface_dark</item>
+        <item name="titleTextStyle">@style/SuryaActionBarTitle</item>
+    </style>
+
+    <style name="SuryaActionBar.Light" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/yellow_400</item>
+        <item name="titleTextStyle">@style/SuryaActionBarTitle.Light</item>
+    </style>
+
+    <style name="SuryaActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/yellow_400</item>
+    </style>
+
+    <style name="SuryaActionBarTitle.Light" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

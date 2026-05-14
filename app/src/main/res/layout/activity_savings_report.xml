@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="📊 30-Day Energy Report"
+                android:textColor="@color/yellow_400"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btn_export_csv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Export CSV"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_menu_share"
+                app:tint="@color/yellow_400" />
+        </RelativeLayout>
+
+        <!-- Summary Cards Grid -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="☀️ Generated" android:textColor="?android:attr/textColorSecondary" android:textSize="11sp"/>
+                    <TextView android:id="@+id/tv_total_generated"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="0 kWh" android:textColor="@color/yellow_400"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🔌 Consumed" android:textColor="?android:attr/textColorSecondary" android:textSize="11sp"/>
+                    <TextView android:id="@+id/tv_total_consumed"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="0 kWh" android:textColor="@color/red_400"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⚡ Over-Gen Days" android:textColor="?android:attr/textColorSecondary" android:textSize="11sp"/>
+                    <TextView android:id="@+id/tv_over_gen_days"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="0 days" android:textColor="@color/green_500"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="💰 Total Saved" android:textColor="?android:attr/textColorSecondary" android:textSize="11sp"/>
+                    <TextView android:id="@+id/tv_total_savings"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="₹0.00" android:textColor="@color/green_500"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Environmental Impact Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌿 Environmental Impact"
+            android:textColor="@color/green_500"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="3dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="💨 CO2 Offset" android:textColor="?android:attr/textColorSecondary" android:textSize="12sp"/>
+                    <TextView android:id="@+id/tv_co2_offset"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="0.0 kg" android:textColor="@color/green_500"
+                        android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#22888888" android:layout_marginHorizontal="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🌳 Trees Equivalent" android:textColor="?android:attr/textColorSecondary" android:textSize="12sp"/>
+                    <TextView android:id="@+id/tv_trees_equivalent"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="0.00" android:textColor="@color/green_500"
+                        android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Bar Chart -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 7 Days – Generated vs Consumed"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bar_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Insights / Tips based on data -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/yellow_400"
+            app:cardCornerRadius="12dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="💡 Pro Insight" android:textColor="@color/bg_dark"
+                    android:textSize="14sp" android:textStyle="bold"/>
+                <TextView android:id="@+id/tv_insight_text"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Calculating your performance..." android:textColor="@color/bg_dark"
+                    android:textSize="13sp" android:layout_marginTop="4dp" android:lineSpacingMultiplier="1.2"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

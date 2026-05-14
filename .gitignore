@@ -1,0 +1,58 @@
+# Gradle files
+.gradle/
+build/
+
+# Local configuration files
+local.properties
+
+# Android Studio / IntelliJ files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+.idea/deploymentTargetDropDown.xml
+*.iml
+*.iws
+*.ipr
+out/
+
+# Generated files
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Secrets & Keystores (IMPORTANT)
+*.jks
+*.keystore
+*.p12
+google-services.json
+signing.properties
+key.properties
+.env
+
+# Built artifacts
+*.apk
+*.aab
+*.ap_
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Gradle Wrapper (Keep the jar and properties)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# Log files
+*.log
+
+# Others
+.navigation/
+test-output/
+*.tmp
+*.temp

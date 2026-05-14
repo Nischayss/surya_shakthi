@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="☀️ Surya-Shakti"
+                    android:textColor="@color/yellow_400"
+                    android:textSize="22sp"
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/btn_theme_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="🌙 Dark"
+                    android:textSize="11sp"
+                    android:textColor="@color/yellow_400"
+                    app:backgroundTint="?attr/colorSurface"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="2dp">
+
+                <TextView
+                    android:id="@+id/tv_today_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="13sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"/>
+
+                <TextView
+                    android:id="@+id/tv_weather_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="☀️"
+                    android:textSize="20sp"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/tv_weather_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunny"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_grid_balance_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grid Balance: 0.00 kWh"
+                android:textColor="@color/green_500"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- Circular Progress Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Solar vs Grid Usage"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="12dp"/>
+
+                <FrameLayout
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:gravity="center">
+
+                    <ProgressBar
+                        android:id="@+id/circular_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/circular_progress_drawable"
+                        android:rotation="-90"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tv_solar_percent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0%"
+                            android:textColor="@color/yellow_400"
+                            android:textSize="32sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Solar"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_net_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No data yet"
+                    android:textColor="@color/yellow_400"
+                    android:textSize="13sp"
+                    android:layout_marginTop="12dp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/tv_prosumer_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PROSUMER"
+                    android:textColor="@color/white"
+                    android:background="@color/green_500"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="6dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Stats Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⚡ Generated"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:id="@+id/tv_generated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00 kWh"
+                        android:textColor="@color/yellow_400"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔌 Consumed"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:id="@+id/tv_consumed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00 kWh"
+                        android:textColor="@color/red_400"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Battery & Savings Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔋 Battery"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:id="@+id/tv_battery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0%"
+                        android:textColor="@color/green_500"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"/>
+                    <ProgressBar
+                        android:id="@+id/battery_progress_bar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/battery_progress_drawable"
+                        android:layout_marginTop="6dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="💰 Today Saved"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:id="@+id/tv_today_savings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹0.00"
+                        android:textColor="@color/green_500"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"/>
+                    <TextView
+                        android:id="@+id/tv_monthly_savings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹0.00"
+                        android:textColor="@color/yellow_400"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <!-- Independence Score Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Independence Score"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:id="@+id/tv_independence_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0/100"
+                    android:textColor="@color/yellow_400"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+                <ProgressBar
+                    android:id="@+id/independence_progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/battery_progress_drawable"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:id="@+id/tv_score_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔌 Grid Dependent"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- 1. Estimated Generation Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="⚡ Estimated Generation Today"
+                        android:textColor="@color/yellow_400"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                    <Button
+                        android:id="@+id/btn_edit_capacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="⚙️ Edit"
+                        android:textSize="9sp"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/yellow_400"
+                        style="@style/Widget.MaterialComponents.Button"/>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Weather"
+                    app:boxStrokeColor="@color/yellow_400">
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_weather"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_estimated_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="~ 0.0 kWh (Based on system capacity)"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:paddingTop="4dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- 2. Log Today's Data Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📝 Log Today's Data"
+                    android:textColor="@color/yellow_400"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Solar Generated (kWh)"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/yellow_400">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_generated"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textColor="?android:attr/textColorPrimary"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Consumed (kWh)"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/yellow_400">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_consumed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textColor="?android:attr/textColorPrimary"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Battery Level (0-100%)"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/yellow_400">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_battery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textColor="?android:attr/textColorPrimary"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_save_log"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="✅ Save Today's Log"
+                    android:textColor="@color/black"
+                    app:backgroundTint="@color/yellow_400"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"
+                    style="@style/Widget.MaterialComponents.Button"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Quick Actions Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp"
+                android:gravity="center">
+                <LinearLayout
+                    android:id="@+id/btn_log"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📋" android:textSize="22sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Logs" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                </LinearLayout>
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
+                <LinearLayout
+                    android:id="@+id/btn_report"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📊" android:textSize="22sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Report" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                </LinearLayout>
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
+                <LinearLayout
+                    android:id="@+id/btn_appliances"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔌" android:textSize="22sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Usage" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                </LinearLayout>
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
+                <LinearLayout
+                    android:id="@+id/btn_tips"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💡" android:textSize="22sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tips" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                </LinearLayout>
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#22FFFFFF"/>
+                <LinearLayout
+                    android:id="@+id/btn_smart_care"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✨" android:textSize="22sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Care" android:textSize="10sp" android:textColor="@color/yellow_400" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>
