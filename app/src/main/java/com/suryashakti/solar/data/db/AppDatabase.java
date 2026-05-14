@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.suryashakti.solar.data.model.Appliance;
 import com.suryashakti.solar.data.model.EnergyLog;
 
-@Database(entities = {EnergyLog.class, Appliance.class}, version = 4, exportSchema = false)
+@Database(entities = {EnergyLog.class, Appliance.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

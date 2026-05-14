@@ -394,7 +394,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- 1. Estimated Generation Card -->
+        <!-- 1. System Configuration Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -419,7 +419,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="⚡ Estimated Generation Today"
+                        android:text="⚙️ Configuration"
                         android:textColor="@color/yellow_400"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
@@ -427,7 +427,17 @@
                         android:id="@+id/btn_edit_capacity"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
-                        android:text="⚙️ Edit"
+                        android:text="Panel"
+                        android:textSize="9sp"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/yellow_400"
+                        android:layout_marginEnd="4dp"
+                        style="@style/Widget.MaterialComponents.Button"/>
+                    <Button
+                        android:id="@+id/btn_edit_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="Rate"
                         android:textSize="9sp"
                         android:textColor="@color/black"
                         app:backgroundTint="@color/yellow_400"
@@ -439,7 +449,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:hint="Weather"
+                    android:hint="Weather Forecast"
                     app:boxStrokeColor="@color/yellow_400">
                     <AutoCompleteTextView
                         android:id="@+id/auto_weather"
@@ -452,7 +462,7 @@
                     android:id="@+id/tv_estimated_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="~ 0.0 kWh (Based on system capacity)"
+                    android:text="~ 0.0 kWh (Based on panel capacity)"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textSize="14sp"
                     android:textStyle="bold"

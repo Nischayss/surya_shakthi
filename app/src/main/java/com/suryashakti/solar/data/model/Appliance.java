@@ -1,6 +1,7 @@
 package com.suryashakti.solar.data.model;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "appliances")
@@ -14,6 +15,7 @@ public class Appliance {
 
     public Appliance() {}
 
+    @Ignore
     public Appliance(String name, String emoji, float watts) {
         this.name = name;
         this.emoji = emoji;

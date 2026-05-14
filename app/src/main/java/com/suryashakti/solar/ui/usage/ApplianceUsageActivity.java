@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,8 +32,10 @@ import com.suryashakti.solar.databinding.ActivityApplianceUsageBinding;
 import com.suryashakti.solar.utils.ThemeManager;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class ApplianceUsageActivity extends AppCompatActivity {
 
@@ -57,7 +61,6 @@ public class ApplianceUsageActivity extends AppCompatActivity {
         setupRecyclerView();
         setupPieChart();
 
-        // Use cumulative net energy (Grid Balance) for the runtime calculations
         viewModel.getTotalNetEnergy().observe(this, totalNet -> {
             float netSurplus = (totalNet != null) ? Math.max(0, totalNet) : 0;
             binding.tvAvailableEnergy.setText(String.format(Locale.getDefault(), "Grid Balance: %.2f kWh", netSurplus));
@@ -80,7 +83,6 @@ public class ApplianceUsageActivity extends AppCompatActivity {
             }
         });
 
-        // Quick Calculator Implementation
         binding.btnCalculateRuntime.setOnClickListener(v -> calculateQuickRuntime());
     }
 
@@ -93,30 +95,22 @@ public class ApplianceUsageActivity extends AppCompatActivity {
 
         try {
             float testKwh = Float.parseFloat(inputStr);
-            if (currentAppliances == null || currentAppliances.isEmpty()) {
-                binding.tvCalcResult.setText("Add some appliances first to see how long " + testKwh + " kWh lasts.");
+            float selectedWatts = adapter.getSelectedWatts();
+
+            if (selectedWatts <= 0) {
+                binding.tvCalcResult.setText("Select appliances using the checkboxes to calculate.");
                 return;
             }
 
-            float totalDailyKwh = 0;
-            for (Appliance a : currentAppliances) {
-                totalDailyKwh += a.watts;
-            }
-
-            if (totalDailyKwh <= 0) {
-                binding.tvCalcResult.setText("Total appliance consumption is 0. Check your settings.");
-                return;
-            }
-
-            float totalDays = testKwh / totalDailyKwh;
+            float totalDays = testKwh / selectedWatts;
             String resultText;
             if (totalDays >= 1) {
-                resultText = String.format(Locale.getDefault(), "With %.1f kWh, you can run ALL listed appliances for %.1f days.", testKwh, totalDays);
+                resultText = String.format(Locale.getDefault(), "With %.1f kWh, selected items can run for %.1f days.", testKwh, totalDays);
             } else {
-                resultText = String.format(Locale.getDefault(), "With %.1f kWh, you can run ALL listed appliances for %.1f hours.", testKwh, totalDays * 24);
+                resultText = String.format(Locale.getDefault(), "With %.1f kWh, selected items can run for %.1f hours.", testKwh, totalDays * 24);
             }
             binding.tvCalcResult.setText(resultText);
-            binding.tvCalcResult.setTextColor(getResources().getColor(R.color.yellow_400));
+            binding.tvCalcResult.setTextColor(ContextCompat.getColor(this, R.color.yellow_400));
 
         } catch (NumberFormatException e) {
             binding.tvCalcResult.setText("Invalid number format.");
@@ -231,9 +225,9 @@ public class ApplianceUsageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // --- Adapter ---
     static class ApplianceAdapter extends RecyclerView.Adapter<ApplianceAdapter.ViewHolder> {
         private List<Appliance> items = new ArrayList<>();
+        private final Set<Integer> selectedIds = new HashSet<>();
         private float currentGridBalance = 0;
         private boolean isMonthly = false;
         private final OnDeleteListener listener;
@@ -244,6 +238,10 @@ public class ApplianceUsageActivity extends AppCompatActivity {
 
         void setAppliances(List<Appliance> appliances) {
             this.items = appliances;
+            // Select all by default only if the list was previously empty
+            if (selectedIds.isEmpty() && !appliances.isEmpty()) {
+                for (Appliance a : appliances) selectedIds.add(a.id);
+            }
             notifyDataSetChanged();
         }
 
@@ -255,6 +253,16 @@ public class ApplianceUsageActivity extends AppCompatActivity {
         void setMonthlyMode(boolean isMonthly) {
             this.isMonthly = isMonthly;
             notifyDataSetChanged();
+        }
+
+        float getSelectedWatts() {
+            float total = 0;
+            for (Appliance a : items) {
+                if (selectedIds.contains(a.id)) {
+                    total += a.watts;
+                }
+            }
+            return total;
         }
 
         @NonNull
@@ -273,6 +281,13 @@ public class ApplianceUsageActivity extends AppCompatActivity {
             float displayValue = isMonthly ? dailyVal * 30 : dailyVal;
             String unit = isMonthly ? "kWh/month" : "kWh/day";
             holder.tvWatts.setText(String.format(Locale.getDefault(), "%.2f %s", displayValue, unit));
+
+            holder.checkBox.setOnCheckedChangeListener(null);
+            holder.checkBox.setChecked(selectedIds.contains(item.id));
+            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) selectedIds.add(item.id);
+                else selectedIds.remove(item.id);
+            });
 
             if (currentGridBalance > 0 && dailyVal > 0) {
                 float totalDays = currentGridBalance / dailyVal;
@@ -304,12 +319,14 @@ public class ApplianceUsageActivity extends AppCompatActivity {
         static class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvName, tvWatts, tvRuntime;
             ImageButton btnDelete;
+            CheckBox checkBox;
             ViewHolder(View v) {
                 super(v);
                 tvName = v.findViewById(R.id.tv_appliance_name);
                 tvWatts = v.findViewById(R.id.tv_appliance_watts);
                 tvRuntime = v.findViewById(R.id.tv_appliance_runtime);
                 btnDelete = v.findViewById(R.id.btn_delete_appliance);
+                checkBox = v.findViewById(R.id.cb_select_appliance);
             }
         }
     }

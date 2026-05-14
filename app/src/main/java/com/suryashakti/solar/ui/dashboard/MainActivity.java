@@ -41,6 +41,9 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String PREFS_NAME = "SuryaShaktiPrefs";
+    public static final String KEY_UNIT_PRICE = "unit_price";
+
     private ActivityMainBinding binding;
     private EnergyViewModel viewModel;
     private boolean isDarkTheme;
@@ -245,6 +248,32 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
         });
+
+        binding.btnEditRate.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            float currentRate = prefs.getFloat(KEY_UNIT_PRICE, 8.0f);
+            
+            EditText input = new EditText(this);
+            input.setHint("e.g. 8.5");
+            input.setText(String.valueOf(currentRate));
+            input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            
+            new MaterialAlertDialogBuilder(this)
+                .setTitle("Electricity Rate (₹/unit)")
+                .setMessage("Set your current electricity price.")
+                .setView(input)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    try {
+                        float val = Float.parseFloat(input.getText().toString());
+                        prefs.edit().putFloat(KEY_UNIT_PRICE, val).apply();
+                        Toast.makeText(this, "Rate updated to ₹" + val, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Invalid number", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
     }
 
     private void showDatePicker() {
@@ -291,7 +320,10 @@ public class MainActivity extends AppCompatActivity {
         String weather = binding.autoWeather.getText().toString();
         if (TextUtils.isEmpty(weather)) weather = WeatherSimulator.SUNNY;
         
-        EnergyLog log = new EnergyLog(selectedLogDate, generated, consumed, battery, weather);
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        float currentRate = prefs.getFloat(KEY_UNIT_PRICE, 8.0f);
+        
+        EnergyLog log = new EnergyLog(selectedLogDate, generated, consumed, battery, weather, currentRate);
         viewModel.insert(log);
 
         if (log.overGeneration) NotificationHelper.sendOverGenerationAlert(this, generated - consumed);
